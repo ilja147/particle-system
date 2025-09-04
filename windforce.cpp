@@ -1,0 +1,9 @@
+#include "windforce.h"
+
+WindForce::WindForce(): directionx(0.0f),directiony(0.0f){}
+WindForce::WindForce(float a, float b):directionx(a),directiony(b){}
+void WindForce::applyForce(float x, float y, float &speedx, float &speedy)
+{
+    speedx += directionx;
+    speedy += directiony;
+}

@@ -2,15 +2,14 @@
 #include "force.h"
 #include "particle.h"
 #include <vector>
-#include <unordered_map>
+#include <memory>
 class ParticleSystem
 {
-    void addparticles(int mincount,int maxcount);
-    int countparticles;
+    void addparticles(int mincount,int maxcount, int lifetime);
     void updateparticles();
     int particlesPerSecond;
-    std::unordered_map<ParticleId,Particle> particles;
-    void useforce(std::vector<force>forces);
+    std::vector<std::vector<Particle>> particles;
+    void useforce(std::unique_ptr<std::vector<Force>>forces);
 public:
     ParticleSystem();
 };

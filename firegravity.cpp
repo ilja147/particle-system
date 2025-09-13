@@ -1,0 +1,18 @@
+#include "firegravity.h"
+#include<random>
+FireGravity::FireGravity(){}
+FireGravity::FireGravity(float a)
+{
+    strength = strength * a;
+}
+void FireGravity::applyForce(float x, float y, float &speedx, float &speedy)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> dist;
+    int chance = dist(gen);
+    if(chance > 50)
+    {
+    speedy += strength;
+    }
+}

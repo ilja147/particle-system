@@ -18,7 +18,9 @@ add_executable(particle_system main.cpp
     force.h force.cpp
     config.h
     gravityforce.h gravityforce.cpp
-    windforce.h windforce.cpp)
+    windforce.h windforce.cpp
+    firegravity.h
+    firegravity.cpp)
 
 
 

@@ -5,11 +5,14 @@
 #include <memory>
 class ParticleSystem
 {
-    void addparticles(int mincount,int maxcount, int lifetime);
-    void updateparticles();
+
     int particlesPerSecond;
     std::vector<std::vector<Particle>> particles;
-    void useforce(std::unique_ptr<std::vector<Force>>forces);
+    void updateParticleBucket(std::vector<Particle> &bucket, float deltaTime);
+    void removeDeadParticles();
+    std::vector<std::unique_ptr<Force>>forces;
 public:
     ParticleSystem();
+    void addparticles(int mincount,int maxcount, int lifetime);
+    void updateparticles(float deltaTime);
 };

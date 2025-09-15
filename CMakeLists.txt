@@ -10,6 +10,7 @@ set(ASSETS_DEST_DIR "${CMAKE_BINARY_DIR}/assets")
 file(COPY ${ASSETS_SOURCE_DIR} DESTINATION ${CMAKE_BINARY_DIR})
 
 find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
 
 add_executable(particle_system main.cpp
     particle.h particle.cpp
@@ -25,7 +26,7 @@ add_executable(particle_system main.cpp
 
 
 
-target_link_libraries(particle_system SDL2::SDL2 SDL2::SDL2main)
+target_link_libraries(particle_system SDL2::SDL2 SDL2::SDL2main SDL2_image::SDL2_image)
 
 include(GNUInstallDirs)
 install(TARGETS particle_system

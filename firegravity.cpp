@@ -9,7 +9,7 @@ void FireGravity::applyForce(float x, float y, float &speedx, float &speedy)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> dist;
+    std::uniform_int_distribution<int> dist(0,100);
     int chance = dist(gen);
     if(chance > 50)
     {

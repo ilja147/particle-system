@@ -1,6 +1,8 @@
 #include <iostream>
 #include <chrono>
+#include <memory>
 #include "particlesystem.h"
+#include "render.h"
 #include "firegravity.h"
 #include "gravityforce.h"
 #include "windforce.h"
@@ -8,12 +10,24 @@ using namespace std;
 
 int main()
 {
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-    TimePoint previousTime = Clock::now();
-    auto firegravity = std::make_unique<FireGravity>(1.0f);
+    Renderer renderer(800,600);
+    if(!renderer.Init())
+    {
+        SDL_Quit();
+        return 1;
+    }
     ParticleSystem ps;
-    ps.addforce(std::move(firegravity));
-    cout << "Hello World!" << endl;
+    ps.addforce(std::make_unique<FireGravity>(0.8f));
+    ps.addparticles(5000,100000,30000,0);
+    auto lastTime = std::chrono::high_resolution_clock::now();
+    while(renderer.isRunning())
+    {
+        auto now = std::chrono::high_resolution_clock::now();
+        float deltaTime = std::chrono::duration<float>(now - lastTime).count();
+        lastTime = now;
+        ps.updateparticles(deltaTime);
+        renderer.render(ps);
+    }
+    SDL_Quit();
     return 0;
 }

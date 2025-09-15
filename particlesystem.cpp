@@ -4,21 +4,15 @@
 #include <algorithm>
 ParticleSystem::ParticleSystem()
 {
-    int threadcount = std::thread::hardware_concurrency();
+    threadcount = std::thread::hardware_concurrency();
     if (threadcount == 0)
     {
-        threadcount = 4;
+        threadcount = 5;
     }
     particles.resize(threadcount);
 }
 void ParticleSystem::addparticles(int mincount, int maxcount, int lifetime, int baseColorIndex = 0)
 {
-    int threadcount = 0;
-    threadcount = std::thread::hardware_concurrency();
-    if(threadcount == 0)
-    {
-        threadcount = 4;
-    }
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> dist(mincount,maxcount);
@@ -26,21 +20,21 @@ void ParticleSystem::addparticles(int mincount, int maxcount, int lifetime, int 
     int chunk_size = std::max(1, count/threadcount);
     size_t current_vector = 0;
     int j = 0;
-    int minx = 0, maxx= 10;
+    int minx = 100, maxx= 600;
     std::uniform_int_distribution<int>particlex(minx,maxx);
     std::uniform_int_distribution<int>totallifetime(100,lifetime);
     std::uniform_int_distribution<int>color(0,9);
     size_t nextId=0;
-    particles.resize(threadcount);
+    //particles.resize(threadcount);
     for (int i = 0; i < count; i++)
     {
         Particle newParticle;
         newParticle.x = particlex(gen);
-        newParticle.y = 0;
+        newParticle.y = 1;
         newParticle.lifetime = totallifetime(gen);
         newParticle.id = nextId++;
         newParticle.colorindex = baseColorIndex + color(gen);
-        if(particles[j].size() == chunk_size)
+        if(particles[j].size() == chunk_size && j < threadcount-1)
         {
             j++;
             particles[j].reserve(chunk_size);
@@ -64,7 +58,8 @@ void ParticleSystem::updateParticleBucket(std::vector<Particle> &bucket, float d
         particle.lifetime--;
         if(particle.lifetime <= 0)
         {
-            particle.isActive = false;
+            //particle.isActive = false;
+            resetParticle(particle, particle.id);
         }
         if(particle.isActive)
         {
@@ -73,34 +68,36 @@ void ParticleSystem::updateParticleBucket(std::vector<Particle> &bucket, float d
         }
     }
 }
-void ParticleSystem::removeDeadParticles()
+void ParticleSystem::resetParticle(Particle &particle, size_t bucketIndex)
 {
-    for(auto &bucket : particles)
-    {
-        bucket.erase(std::remove_if(bucket.begin(), bucket.end(),[](const Particle &p){return !p.isActive || p.lifetime <= 0;}),bucket.end());
-    }
+    std::random_device rd;
+    std::mt19937 gen(rd());
 }
+// void ParticleSystem::removeDeadParticles()
+// {
+//     for(auto &bucket : particles)
+//     {
+//         bucket.erase(std::remove_if(bucket.begin(), bucket.end(),[](const Particle &p){return !p.isActive || p.lifetime <= 0;}),bucket.end());
+//     }
+// }
 void ParticleSystem::updateparticles(float deltaTime)
 {
     std::vector<std::thread> threads;
     for(int i = 0; i < particles.size();i++)
     {
-        try
-        {
-            threads.emplace_back(&ParticleSystem::updateParticleBucket, this, std::ref(particles[i]),deltaTime);
-        }
-        catch(const std::exception &e)
-        {
-            //на будущее
-        }
-        }
+        threads.emplace_back(&ParticleSystem::updateParticleBucket, this, std::ref(particles[i]),deltaTime);
+    }
     for(std::thread &i : threads)
     {
         i.join();
     }
-    removeDeadParticles();
+    //removeDeadParticles();
 }
 const std::vector<std::vector<Particle>> &ParticleSystem::getParticles() const
 {
     return particles;
+}
+void ParticleSystem::addforce(std::unique_ptr<Force> force)
+{
+    forces.push_back(std::move(force));
 }

@@ -11,7 +11,7 @@ ParticleSystem::ParticleSystem()
     }
     particles.resize(threadcount);
 }
-void ParticleSystem::addparticles(int mincount, int maxcount, int lifetime)
+void ParticleSystem::addparticles(int mincount, int maxcount, int lifetime, int baseColorIndex = 0)
 {
     int threadcount = 0;
     threadcount = std::thread::hardware_concurrency();
@@ -39,7 +39,7 @@ void ParticleSystem::addparticles(int mincount, int maxcount, int lifetime)
         newParticle.y = 0;
         newParticle.lifetime = totallifetime(gen);
         newParticle.id = nextId++;
-        newParticle.colorindex = color(gen);
+        newParticle.colorindex = baseColorIndex + color(gen);
         if(particles[j].size() == chunk_size)
         {
             j++;

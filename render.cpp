@@ -1,7 +1,6 @@
 #include "render.h"
 #include <SDL2/SDL_image.h>
 #include <string>
-#include <fstream>
 
 //Renderer:
 bool Renderer::Init()
@@ -38,15 +37,20 @@ bool Renderer::Init()
 }
 void Renderer::render(const ParticleSystem &ps)
 {
-    SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
     for(const auto &bucket : ps.getParticles())
     {
         for(const auto &particle : bucket)
         {
-            float screenY = height - particle.y;
+            if(particle.isActive)
+            {
+                renderParticle(particle);
+            }
         }
     }
+    SDL_RenderPresent(renderer);
 }
 bool Renderer::loadColors(const std::string filename)
 {
@@ -66,4 +70,25 @@ bool Renderer::loadColors(const std::string filename)
     }
     SDL_FreeSurface(surface);
     return success;
+}
+void Renderer::renderParticle(const Particle &particle) const
+{
+    if(texture == nullptr)
+    {
+        return;
+    }
+    int row = particle.colorindex/10;
+    int col = particle.colorindex%10;
+    SDL_Rect src;
+    src.x = col;
+    src.y = row;
+    src.w = 1;
+    src.h = 1;
+    int screenY = height - static_cast<int>(particle.y);
+    SDL_Rect dst;
+    dst.x = static_cast<int>(particle.x);
+    dst.y = screenY;
+    dst.w = 1;
+    dst.h = 1;
+    SDL_RenderCopy(renderer, texture, &src, &dst);
 }

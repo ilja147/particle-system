@@ -12,6 +12,7 @@ class Renderer
     std::array<SDL_Color,10> firecolors;
     std::array<SDL_Color,10> raincolors;
     bool loadColors(const std::string filename);
+    void renderParticle(const Particle &particle) const;
 public:
     Renderer(int a,int b): width(a),height(b){}
     ~Renderer();

@@ -2,7 +2,15 @@
 #include <random>
 #include <thread>
 #include <algorithm>
-ParticleSystem::ParticleSystem() {}
+ParticleSystem::ParticleSystem()
+{
+    int threadcount = std::thread::hardware_concurrency();
+    if (threadcount == 0)
+    {
+        threadcount = 4;
+    }
+    particles.resize(threadcount);
+}
 void ParticleSystem::addparticles(int mincount, int maxcount, int lifetime)
 {
     int threadcount = 0;
@@ -91,4 +99,8 @@ void ParticleSystem::updateparticles(float deltaTime)
         i.join();
     }
     removeDeadParticles();
+}
+const std::vector<std::vector<Particle>> &ParticleSystem::getParticles() const
+{
+    return particles;
 }

@@ -15,4 +15,6 @@ public:
     ParticleSystem();
     void addparticles(int mincount,int maxcount, int lifetime);
     void updateparticles(float deltaTime);
+    void addforce(std::unique_ptr<Force>);
+    const std::vector<std::vector<Particle>> &getParticles() const;
 };

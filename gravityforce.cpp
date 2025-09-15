@@ -7,5 +7,5 @@ GravityForce::GravityForce(float a)
 }
 void GravityForce::applyForce(float x, float y, float &speedx, float &speedy)
 {
-    speedy += strength;
+    speedy -= strength;
 }

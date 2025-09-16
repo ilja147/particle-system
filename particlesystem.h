@@ -9,10 +9,10 @@ class ParticleSystem
     int particlesPerSecond;
     std::vector<std::vector<Particle>> particles;
     void updateParticleBucket(std::vector<Particle> &bucket, float deltaTime);
-    void removeDeadParticles();
+    //void removeDeadParticles();
     std::vector<std::unique_ptr<Force>>forces;
     int threadcount;
-    void resetParticle(Particle &particle, size_t bucketIndex);
+    void resetparticle(Particle &particle, size_t bucketIndex);
 public:
     ParticleSystem();
     void addparticles(int mincount,int maxcount, int lifetime, int baseColorIndex);

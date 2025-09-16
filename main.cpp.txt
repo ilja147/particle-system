@@ -18,7 +18,7 @@ int main()
     }
     ParticleSystem ps;
     ps.addforce(std::make_unique<FireGravity>(0.8f));
-    ps.addparticles(5000,100000,3000,0);
+    ps.addparticles(50,100,300,0);
     auto lastTime = std::chrono::high_resolution_clock::now();
     while(renderer.isRunning())
     {
@@ -31,3 +31,4 @@ int main()
     SDL_Quit();
     return 0;
 }
+

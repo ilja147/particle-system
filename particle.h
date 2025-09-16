@@ -3,7 +3,9 @@
 struct Particle
 {
     float x,y;
+    float startx, starty;
     int lifetime;
+    int maxlifetime = 100;
     bool isActive;
     float speedx;
     float speedy;

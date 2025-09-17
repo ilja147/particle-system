@@ -20,7 +20,7 @@ void ParticleSystem::addparticles(int mincount, int maxcount, int lifetime, int 
     int chunk_size = std::max(1, count/threadcount);
     size_t current_vector = 0;
     int j = 0;
-    int minx = 200, maxx= 400;
+    int minx = 0, maxx= 800;
     std::uniform_int_distribution<int>particlex(minx,maxx);
     std::uniform_int_distribution<int>totallifetime(100,lifetime);
     std::uniform_int_distribution<int>color(0,9);
@@ -30,8 +30,9 @@ void ParticleSystem::addparticles(int mincount, int maxcount, int lifetime, int 
     {
         Particle newParticle;
         newParticle.x = particlex(gen);
-        newParticle.y = 1;
-        newParticle.startx = particlex(gen);
+        newParticle.y = 640;
+        newParticle.startx = newParticle.x;
+        newParticle.starty = newParticle.y;
         newParticle.lifetime = totallifetime(gen);
         newParticle.maxlifetime = lifetime;
         newParticle.id = nextId++;
@@ -66,7 +67,7 @@ void ParticleSystem::updateParticleBucket(std::vector<Particle> &bucket, float d
             particle.speedx = 0;
             particle.speedy = 0;
             particle.x = particle.startx;
-            particle.y = 1;
+            particle.y = particle.starty;
         }
         if(particle.isActive)
         {

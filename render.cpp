@@ -2,7 +2,6 @@
 #include <SDL2/SDL_image.h>
 #include <string>
 
-//Renderer:
 bool Renderer::Init()
 {
     bool success = true;
@@ -58,7 +57,7 @@ void Renderer::render(const ParticleSystem &ps)
             }
         }
     }
-    printf("Active particles: %d\n", activeCount);
+    //printf("Active particles: %d\n", activeCount);
     // if(!renderPoints.empty())
     // {
     //     SDL_SetRenderDrawColor(renderer, 255,255,255,255);
@@ -75,6 +74,7 @@ void Renderer::render(const ParticleSystem &ps)
         SDL_RenderDrawPoints(renderer,points.data(),points.size());
     }
     SDL_RenderPresent(renderer);
+
 }
 bool Renderer::loadColors(const std::string filename)
 {
@@ -86,20 +86,24 @@ bool Renderer::loadColors(const std::string filename)
         printf("Unable to load image. Error: %s",IMG_GetError());
         return false;
     }
+    if (surface->w != 10 || surface->h != 2) {
+        printf("Palette must be 10x2 pixels! Got %dx%d\n", surface->w, surface->h);
+        SDL_FreeSurface(surface);
+        return false;
+    }
     texture = SDL_CreateTextureFromSurface(renderer,surface);
     SDL_LockSurface(surface);
     for(int y = 0; y < 2; y++)
     {
         for(int x = 0; x < 10; x++)
         {
-            Uint32 color = ((Uint32*)surface->pixels)[y * surface->w+x];
-            Uint8 r,g,b,a;
+            Uint32 color = ((Uint32*)surface->pixels)[y * surface->w ];
+            Uint8 r,g,b,a=255;
             SDL_GetRGBA(color,surface->format, &r, &g, &b, &a);
             int colorIndex = y * 10 + x;
             paletteColors[colorIndex] = {r,g,b,a};
         }
     }
-    SDL_UnlockSurface(surface);
     //
     // if(texture == nullptr)
     // {
@@ -107,7 +111,7 @@ bool Renderer::loadColors(const std::string filename)
     //     return false;
     // }
     // printf("Txture loaded successfully");
-    // SDL_FreeSurface(surface);
+    SDL_FreeSurface(surface);
     return success;
 }
 // void Renderer::renderParticle(const Particle &particle)

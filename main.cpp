@@ -17,9 +17,9 @@ int main()
     }
     ParticleSystem ps;
     //ps.addforce(std::make_unique<FireGravity>(0.8f));
-    ps.addforce(std::make_unique<GravityForce>(0.1f));
+    ps.addforce(std::make_unique<GravityForce>(-0.8f));
     ps.addforce(std::make_unique<WindForce>(0.1f,0.0f));
-    ps.addparticles(2000,10000,5000,10);// 1: mincounnt, 2:maxcount, 3:lifetime, 4:color index
+    ps.addparticles(200000,1000000,5000,0);// 1: mincounnt, 2:maxcount, 3:lifetime, 4:color index
     auto lastTime = std::chrono::high_resolution_clock::now();
     while(renderer.isRunning())
     {

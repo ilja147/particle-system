@@ -57,7 +57,7 @@ void Renderer::render(const ParticleSystem &ps)
             }
         }
     }
-    //printf("Active particles: %d\n", activeCount);
+    printf("Active particles: %d\n", activeCount);
     // if(!renderPoints.empty())
     // {
     //     SDL_SetRenderDrawColor(renderer, 255,255,255,255);
@@ -72,6 +72,7 @@ void Renderer::render(const ParticleSystem &ps)
         SDL_Color color = paletteColors[colorindex];
         SDL_SetRenderDrawColor(renderer,color.r, color.g, color.b, 255);
         SDL_RenderDrawPoints(renderer,points.data(),points.size());
+        printf("Color: %d\n",color.b);
     }
     SDL_RenderPresent(renderer);
 
@@ -97,7 +98,7 @@ bool Renderer::loadColors(const std::string filename)
     {
         for(int x = 0; x < 10; x++)
         {
-            Uint32 color = ((Uint32*)surface->pixels)[y * surface->w ];
+            Uint32 color = ((Uint32*)surface->pixels)[y * surface->w + x];
             Uint8 r,g,b,a=255;
             SDL_GetRGBA(color,surface->format, &r, &g, &b, &a);
             int colorIndex = y * 10 + x;

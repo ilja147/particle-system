@@ -13,11 +13,11 @@ find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 
 add_executable(particle_system main.cpp
-    particle.h particle.cpp
+    particle.h
     particlesystem.h particlesystem.cpp
     render.h render.cpp
-    force.h force.cpp
-    config.h
+    force.h
+
     gravityforce.h gravityforce.cpp
     windforce.h windforce.cpp
     firegravity.h

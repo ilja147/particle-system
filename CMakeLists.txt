@@ -7,7 +7,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(ASSETS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/assets")
 set(ASSETS_DEST_DIR "${CMAKE_BINARY_DIR}/assets")
-file(COPY ${ASSETS_SOURCE_DIR} DESTINATION ${CMAKE_BINARY_DIR})
+add_custom_command(
+    OUTPUT ${ASSETS_DEST_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSETS_SOURCE_DIR} ${ASSETS_DEST_DIR}
+    COMMENT "Copying assets to build directory..."
+    VERBATIM
+)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
